@@ -1,0 +1,6 @@
+1. Readme
+2. Test plan 
+3. Report ( contains: design spec, test plan/scenarios, verification environment, tast distribution, funcitonal coverage and bug report. 
+4. hdl: It has the .sv files along with design .v files. Transcript, project file (fProject) and Makefile is also there inside the hdl folder. For simulaiton include all .sv and .v files in the hdl folder and simulate the top.sv
+
+(we did directed testing from transaction class)
