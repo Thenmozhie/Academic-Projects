@@ -1,0 +1,188 @@
+library IEEE;
+use ieee.std_logic_1164.all;
+
+-- Entity Declaration: 
+entity multiplier is
+	port( A : in std_logic_vector (15 downto 0);
+		B: in std_logic_vector(7 downto 0);
+		 Z: out std_logic_vector (23 downto 0));
+end multiplier;
+
+-- Architecture Implementation:
+architecture mul of multiplier is
+
+-- Component Declaration of partial product:
+Component partial_product24 
+	port( A  : in std_logic_vector (7 downto 0);
+		B:in std_logic_vector(7 downto 0);
+		  P: out std_logic_vector (128 downto 1));
+end Component;
+
+-- Component Declaration of half adder:
+Component half_adder1
+	port( A, B : in std_logic;
+		  sum, carry : out std_logic);
+end Component;
+
+-- Component Declaration of full_adder:
+Component full_adder1
+	port( A, B, carry_in : in std_logic;
+		  sum, carry_out : out std_logic);
+end Component; 
+
+-- Signal declarations:
+signal P: std_logic_vector (128 downto 1);
+signal S: std_logic_vector (102 downto 2);
+signal C: std_logic_vector (121 downto 2);
+
+begin
+
+-- Finding the partial products of the 8 bit number: 
+result: partial_product24 port map (A (15 downto 0),B (7 downto 0), P (128 downto 1));
+
+-- Performing addition on partial products using half adders and full adders:
+
+-- First STAGE:
+Z(0)<=P(1);
+HA1: half_adder1 port map (P(2), P(17), S(2), C(2));
+FA1: full_adder1 port map (P(3), P(18),P(33), S(3), C(3));
+FA2: full_adder1 port map (P(4), P(19),P(34), S(4), C(4));
+FA3: full_adder1 port map (P(5), P(20),P(35), S(5), C(5));
+FA4: full_adder1 port map (P(6), P(21),P(36), S(6), C(6));
+FA5: full_adder1 port map (P(7), P(22),P(37), S(7), C(7));
+FA6: full_adder1 port map (P(8), P(23),P(38), S(8), C(8));
+FA7: full_adder1 port map (P(9), P(24),P(39), S(9), C(9));
+FA8: full_adder1 port map (P(10), P(25),P(40), S(10), C(10));
+FA9: full_adder1 port map (P(11), P(26),P(41), S(11), C(11));
+FA10: full_adder1 port map (P(12), P(27),P(42), S(12), C(12));
+FA11: full_adder1 port map (P(13), P(28),P(43), S(13), C(13));
+FA12: full_adder1 port map (P(14), P(29),P(44), S(14), C(14));
+FA13: full_adder1 port map (P(15), P(30),P(45), S(15), C(15));
+FA14: full_adder1 port map (P(16), P(31),P(46), S(16), C(16));
+HA2: half_adder1 port map (P(32), P(47), S(17), C(17));
+
+
+HA3: half_adder1 port map (P(50), P(65), S(18), C(18));
+FA15: full_adder1 port map (P(51), P(66),P(81), S(19), C(19));
+FA16: full_adder1 port map (P(52), P(67),P(82), S(20), C(20));
+FA17: full_adder1 port map (P(53), P(68),P(83), S(21), C(21));
+FA18: full_adder1 port map (P(54), P(69),P(84), S(22), C(22));
+FA19: full_adder1 port map (P(55), P(70),P(85), S(23), C(23));
+FA20: full_adder1 port map (P(56), P(71),P(86), S(24), C(24));
+FA21: full_adder1 port map (P(57), P(72),P(87), S(25), C(25));
+FA22: full_adder1 port map (P(58), P(73),P(88), S(26), C(26));
+FA23: full_adder1 port map (P(59), P(74),P(89), S(27), C(27));
+FA24: full_adder1 port map (P(60), P(75),P(90), S(28), C(28));
+FA25: full_adder1 port map (P(61), P(76),P(91), S(29), C(29));
+FA26: full_adder1 port map (P(62), P(77),P(92), S(30), C(30));
+FA27: full_adder1 port map (P(63), P(78),P(93), S(31), C(31));
+FA28: full_adder1 port map (P(64), P(79),P(94), S(32), C(32));
+HA4: half_adder1 port map (P(80), P(95), S(33), C(3));
+
+
+--SECOND STAGE:
+Z(1)<=S(2);
+HA5: half_adder1 port map (S(3), C(2), S(34), C(34));
+FA29: full_adder1 port map (S(4), C(3),P(49), S(35), C(35));
+FA30: full_adder1 port map (S(5), C(4),S(18), S(36), C(36));
+FA31: full_adder1 port map (S(6), C(5),S(19), S(37), C(37));
+FA32: full_adder1 port map (S(7), C(6),S(20), S(38), C(38));
+FA33: full_adder1 port map (S(8), C(7),S(21), S(39), C(39));
+FA34: full_adder1 port map (S(9), C(8),S(22), S(40), C(40));
+FA35: full_adder1 port map (S(10), C(9),S(23), S(41), C(41));
+FA36: full_adder1 port map (S(11), C(10),S(24), S(42), C(42));
+FA37: full_adder1 port map (S(12), C(11),S(25), S(43), C(43));
+FA38: full_adder1 port map (S(13), C(12),S(26), S(44), C(44));
+FA39: full_adder1 port map (S(14), C(13),S(27), S(45), C(45));
+FA40: full_adder1 port map (S(15), C(14),S(28), S(46), C(46));
+FA41: full_adder1 port map (S(16), C(15),S(29), S(47), C(47));
+FA42: full_adder1 port map (S(17), C(16),S(30), S(48), C(48));
+FA43: full_adder1 port map (P(48), C(17),S(31), S(49), C(49));
+
+
+HA6: half_adder1 port map (C(19), P(97), S(50), C(50));
+FA44: full_adder1 port map (C(20), P(98),P(113), S(51), C(51));
+FA45: full_adder1 port map (C(21), P(99),P(114), S(52), C(52));
+FA46: full_adder1 port map (C(22), P(100),P(115), S(53), C(53));
+FA47: full_adder1 port map (C(23), P(101),P(116), S(54), C(54));
+FA48: full_adder1 port map (C(24), P(102),P(117), S(55), C(55));
+FA49: full_adder1 port map (C(25), P(103),P(118), S(56), C(56));
+FA50: full_adder1 port map (C(26), P(104),P(119), S(57), C(57));
+FA51: full_adder1 port map (C(27), P(105),P(120), S(58), C(58));
+FA52: full_adder1 port map (C(28), P(106),P(121), S(59), C(59));
+FA53: full_adder1 port map (C(29), P(107),P(122), S(60), C(60));
+FA54: full_adder1 port map (C(30), P(108),P(123), S(61), C(61));
+FA55: full_adder1 port map (C(31), P(109),P(124), S(62), C(62));
+FA56: full_adder1 port map (C(32), P(110),P(125), S(63), C(63));
+FA57: full_adder1 port map (P(96), P(111),P(126), S(64), C(64));
+HA7: half_adder1 port map (P(112), P(127), S(65), C(65));
+
+
+--THIRD STAGE:
+Z(2)<=S(34);
+HA8: half_adder1 port map (S(35), C(34), S(66), C(66));
+HA9: half_adder1 port map (S(36), C(35), S(67), C(67));
+FA58: full_adder1 port map (S(37), C(36),C(18), S(68), C(68));
+FA59: full_adder1 port map (S(38), C(37),S(50), S(69), C(69));
+FA60: full_adder1 port map (S(39), C(38),S(51), S(70), C(70));
+FA61: full_adder1 port map (S(40), C(39),S(52), S(71), C(71));
+FA62: full_adder1 port map (S(41), C(40),S(53), S(72), C(72));
+FA63: full_adder1 port map (S(42), C(41),S(54), S(73), C(73));
+FA64: full_adder1 port map (S(43), C(42),S(55), S(74), C(74));
+FA65: full_adder1 port map (S(44), C(43),S(56), S(75), C(75));
+FA66: full_adder1 port map (S(45), C(44),S(57), S(76), C(76));
+FA67: full_adder1 port map (S(46), C(45),S(58), S(77), C(77));
+FA68: full_adder1 port map (S(47), C(46),S(59), S(78), C(78));
+FA69: full_adder1 port map (S(48), C(47),S(60), S(79), C(79));
+FA70: full_adder1 port map (S(49), C(48),S(61), S(80), C(80));
+FA71: full_adder1 port map (S(32), C(49),S(62), S(81), C(81));
+HA10: half_adder1 port map (S(33), S(63), S(82), C(82));
+HA11: half_adder1 port map (P(96), S(64), S(83), C(83));
+
+--FOURTH STAGE:
+Z(3)<=S(66);
+HA12: half_adder1 port map (S(67), C(66), S(84), C(84));
+HA13: half_adder1 port map (S(68), C(67), S(85), C(85));
+HA14: half_adder1 port map (S(69), C(68), S(86), C(86));
+FA72: full_adder1 port map (S(70), C(69),C(50), S(87), C(87));
+FA74: full_adder1 port map (S(71), C(70),C(51), S(88), C(88));
+FA75: full_adder1 port map (S(72), C(71),C(52), S(89), C(89));
+FA76: full_adder1 port map (S(73), C(72),C(53), S(90), C(90));
+FA77: full_adder1 port map (S(74), C(73),C(54), S(91), C(91));
+FA78: full_adder1 port map (S(75), C(74),C(55), S(92), C(92));
+FA79: full_adder1 port map (S(76), C(75),C(56), S(93), C(93));
+FA80: full_adder1 port map (S(77), C(76),C(57), S(94), C(94));
+FA81: full_adder1 port map (S(78), C(77),C(58), S(95), C(95));
+FA82: full_adder1 port map (S(79), C(78),C(59), S(96), C(96));
+FA83: full_adder1 port map (S(80), C(79),C(60), S(97), C(97));
+FA84: full_adder1 port map (S(81), C(80),C(61), S(98), C(98));
+FA85: full_adder1 port map (S(82), C(81),C(62), S(99), C(99));
+FA86: full_adder1 port map (S(83), C(82),C(63), S(100), C(100));
+FA87: full_adder1 port map (S(65), C(83),C(64), S(101), C(101));
+HA15: half_adder1 port map (P(128), C(65), S(102), C(102));
+
+--FIFTH STAGE:
+Z(4)<=S(84);
+HA16: half_adder1 port map (S(85), C(84), Z(5), C(103));
+FA88: full_adder1 port map (S(86), C(85),C(103), Z(6), C(104));
+FA89: full_adder1 port map (S(87), C(86),C(104), Z(7), C(105));
+FA90: full_adder1 port map (S(88), C(87),C(105), Z(8), C(106));
+FA91: full_adder1 port map (S(89), C(88),C(106), Z(9), C(107));
+FA92: full_adder1 port map (S(90), C(89),C(107), Z(10), C(108));
+FA93: full_adder1 port map (S(91), C(90),C(108), Z(11), C(109));
+FA94: full_adder1 port map (S(92), C(91),C(109), Z(12), C(110));
+FA95: full_adder1 port map (S(93), C(92),C(110), Z(13), C(111));
+FA96: full_adder1 port map (S(94), C(93),C(111), Z(14), C(112));
+FA97: full_adder1 port map (S(95), C(94),C(112), Z(15), C(113));
+FA98: full_adder1 port map (S(96), C(95),C(113), Z(16), C(114));
+FA99: full_adder1 port map (S(97), C(96),C(114), Z(17), C(115));
+FA100: full_adder1 port map (S(98), C(97),C(115), Z(18), C(116));
+FA101: full_adder1 port map (S(99), C(98),C(116), Z(19), C(117));
+FA102: full_adder1 port map (S(100), C(99),C(117), Z(20), C(118));
+FA103: full_adder1 port map (S(101), C(100),C(118), Z(21), C(119));
+FA104: full_adder1 port map (S(102), C(101),C(119), Z(22), C(120));
+HA17: half_adder1 port map (C(102), C(120), Z(23), C(121));
+
+
+end mul;
+
