@@ -1,0 +1,75 @@
+-- VHDL code for Instruction Memory
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;  
+
+entity inst_mem is
+generic (
+        inst_depth : integer := 256    -- depth of the instruction memory
+		);
+port (
+ clk: in  std_logic;
+ pc: in std_logic_vector(31 downto 0);
+ inst: out  std_logic_vector(31 downto 0)
+	);
+end inst_mem;
+
+architecture beh of inst_mem is
+  
+--constant inst_depth : integer :=256;
+  
+
+ type im_type is array (0 to inst_depth-1 ) of std_logic_vector(31 downto 0);
+ signal im_data: im_type;
+
+  
+begin
+  
+ instruction_memory:process(pc,clk)
+ begin
+
+case pc(31 downto 0) is 
+  
+ -- when "00000000000000000000000000000000" => im_data(0) <= "00110100110000110000000000000111";  --NORI R3,R6,#7  --R3 = R6 nor 7 (NOR Immediate)
+  --when "00000000000000000000000000000100" => im_data(4) <= "00110000010100000000000000000011";	--NANDI R16,R2,#3 --R16 = R2 NAND 3 (NAND Immediate)
+  --when "00000000000000000000000000001000" => im_data(8) <= "00100001000100010000000000001001";	--ADDI R17,R8, #9 --R17 = R17 + 9   
+  --when "00000000000000000000000000001100" => im_data(12) <= "00000000000000000010000010000010";	--SRL R4,R0,#2 --shift right by 2 and store it in R4  
+    
+    
+  
+  
+  
+  
+  
+when "00000000000000000000000000000000" => im_data(0) <= "00110100110000110000000000000111";	-- NORI R3,R6,#7
+when "00000000000000000000000000000100" => im_data(4) <= "00110000010100000000000000000011"; --NANDI R16,R2,#3
+when "00000000000000000000000000001000" => im_data(8) <= "00000010000000000010000000100110"; --XOR R4,R16,R0
+when "00000000000000000000000000001100" => im_data(12) <= "10000100101010100000000000000000";  --LH R10,0(R5)
+when "00000000000000000000000000010000" => im_data(16) <= "10101100111010100000000000000000";  --SW R10,0(R7)
+when "00000000000000000000000000010100" => im_data(20) <= "00100001000100010000000000001001";	--ADDI R17,R8,#9
+when "00000000000000000000000000011000" => im_data(24) <= "00000000010101111010000011000010";	--SRL R20, R23, h=3
+when "00000000000000000000000000011100" => im_data(28) <= "00010001001100110000000000100100";	--BEQ R9,R19,36
+
+when "00000000000000000000000000100000" => im_data(32) <= "00110100110000110000000000000111";	--NORI ---dummy anyway should stall
+when "00000000000000000000000000100100" => im_data(36) <= "00110000010100000000000000000011";	--NANDI---dummy anyway should stall
+when "00000000000000000000000000101000" => im_data(40) <= "00000010000000000010000000100110";	--XOR---dummy anyway should stall
+
+
+when "00000000000000000000000010101100" => im_data(172) <= "00000001100011010101100000100011";	--SUBU R11,R12,R13
+when "00000000000000000000000010110000" => im_data(176) <= "10000100010011110000000000000000";	--LH R15,0(R2)
+when "00000000000000000000000010110100" => im_data(180) <= "00100001111100100000000000000000";	--ADDI R18,R15,#0
+when "00000000000000000000000010111000" => im_data(184) <= "00000001110000000000000000001000";	--JR R14
+when "00000000000000000000000010111100" => im_data(188) <= "00001000000000000000000000000000";	--J R0  
+ 
+
+
+when others => im_data <= (others => "00100001000100010000000000001001"); --ADDI R17,R8, #9 --R17 = R17 + 9 
+
+end case;
+
+inst <= im_data(to_integer(unsigned(pc(31 downto 0))));
+end process;
+
+    
+   
+end beh;
