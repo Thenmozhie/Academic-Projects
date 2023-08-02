@@ -1,0 +1,16 @@
+1 - 	Mini_MIPS folder contain all the stages with top module to run the Mini-MIPS processor.
+	a_top_module file should be used for simulation. Each stage is prefixed  with stage name.
+                                                            eg: "IF_inst_fetch".
+                
+              PROCEDURE
+              a. add all the 34 files to the project and compile.
+              b. Library >> work>> simulate the tb
+     
+
+2 -	Testbench_for_each_stage folder contains test bench for each stage of the preocessor 
+	such as Instruction Fetch, Instruction Decode, Execute, Memory. 
+	This VHDL files should be complied and simulated along with Mini_MIPS folder to test
+	each stage functionality. Testbech of each stage is prefixed with the stage name.
+                                         eg: "IF_tb".
+
+3 -  	Stall folder has the stall code which we tried to implement. 
